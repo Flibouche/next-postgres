@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import NewPost from "./new/page";
 
 export default async function Posts() {
     const posts = await prisma.post.findMany({
@@ -22,6 +23,9 @@ export default async function Posts() {
                         </span>
                     </li>
                 ))}
+                <div>
+                    <NewPost />
+                </div>
             </ul>
         </div>
     );
