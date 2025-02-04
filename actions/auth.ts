@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from 'bcryptjs';
-import { SignupFormSchema, FormState } from '@/lib/definitions'
+import { SignupFormSchema, FormState, LoginFormSchema } from '@/lib/definitions'
 import prisma from '@/lib/prisma'
 import { createSession, deleteSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
@@ -51,7 +51,7 @@ export async function signup(state: FormState, formData: FormData) {
 }
 
 export async function login(state: FormState, formData: FormData) {
-    const validatedFields = SignupFormSchema.safeParse({
+    const validatedFields = LoginFormSchema.safeParse({
         email: formData.get('email'),
         password: formData.get('password'),
     })

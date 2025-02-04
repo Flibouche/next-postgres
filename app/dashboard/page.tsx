@@ -1,17 +1,13 @@
-import { verifySession } from '@/lib/dal'
-import { redirect } from 'next/navigation'
+import SignoutForm from '@/ui/signout-form'
+import React from 'react'
 
-export default async function Dashboard() {
-    const session = await verifySession()
-    const userRole = session?.user?.role // Assuming 'role' is part of the session object
-
-    if (userRole === 'admin') {
-        // return <AdminDashboard />
-        return <div>Admin Dashboard</div>
-    } else if (userRole === 'user') {
-        // return <UserDashboard />
-        return <div>User Dashboard</div>
-    } else {
-        redirect('/login')
-    }
+const Dashboard = () => {
+    return (
+        <div>
+            <p>Dashboard</p>
+            <SignoutForm />
+        </div>
+    )
 }
+
+export default Dashboard

@@ -15,7 +15,12 @@ export const SignupFormSchema = z.object({
             message: 'Contain at least one special character.',
         })
         .trim(),
-})
+});
+
+export const LoginFormSchema = z.object({
+    email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+    password: z.string().min(8, { message: 'Be at least 8 characters long' }),
+});
 
 export type FormState =
     | {
