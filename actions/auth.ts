@@ -48,12 +48,6 @@ export async function signup(state: FormState, formData: FormData) {
             message: 'An error occurred while creating your account.',
         }
     }
-
-    console.log('User created:', user);
-
-    await createSession(user.id);
-
-    redirect('/posts');
 }
 
 export async function login(state: FormState, formData: FormData) {

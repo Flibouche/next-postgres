@@ -21,10 +21,9 @@ export default async function Home() {
             <div className='mt-8'>
                 {session ? (
                     <SignoutForm />
-                ) :
-                    (
-                        <SignupForm />
-                    )}
+                ) : (
+                    <SignupForm />
+                )}
             </div>
             <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
