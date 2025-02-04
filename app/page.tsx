@@ -1,10 +1,11 @@
 import prisma from '@/lib/prisma'
+import SignupForm from '@/ui/signup-form';
 
 export default async function Home() {
     const users = await prisma.user.findMany();
     return (
-        <div className="min-h-screen bg-gray-500 flex flex-col items-center justify-center -mt-16">
-            <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)] text-[#333333]">
+        <div className="min-h-screen bg-gray-500 flex flex-col items-center justify-center -mt-16 text-black">
+            <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
                 Superblog
             </h1>
             <ol className="list-decimal list-inside font-[family-name:var(--font-geist-sans)]">
@@ -14,6 +15,9 @@ export default async function Home() {
                     </li>
                 ))}
             </ol>
+            <div className='mt-8'>
+                <SignupForm />
+            </div>
         </div>
     );
 }
