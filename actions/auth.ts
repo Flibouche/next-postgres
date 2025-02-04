@@ -56,6 +56,42 @@ export async function signup(state: FormState, formData: FormData) {
     redirect('/posts');
 }
 
+export async function login(state: FormState, formData: FormData) {
+    const validatedFields = SignupFormSchema.safeParse({
+        email: formData.get('email'),
+        password: formData.get('password'),
+    })
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+        }
+    }
+
+    const { email, password } = validatedFields.data;
+
+    const user = await prisma.user.findUnique({
+        where: { email },
+    });
+
+    if (!user) {
+        return {
+            message: 'Invalid credentials.',
+        }
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return {
+            message: 'Invalid credentials.'
+        };
+    }
+
+    await createSession(user.id);
+
+    redirect('/');
+}
+
 export async function logout() {
     deleteSession();
     redirect('/');

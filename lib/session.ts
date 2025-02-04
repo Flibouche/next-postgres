@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
 
+// Fonction pour chiffrer les données de session
 export async function encrypt(payload: SessionPayload) {
     return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
@@ -14,6 +15,7 @@ export async function encrypt(payload: SessionPayload) {
         .sign(encodedKey)
 }
 
+// Fonction pour déchiffrer les données de session
 export async function decrypt(session: string | undefined = '') {
     try {
         const { payload } = await jwtVerify(session, encodedKey, {
@@ -25,6 +27,7 @@ export async function decrypt(session: string | undefined = '') {
     }
 }
 
+// Fonction pour créer une session et connecter l'utilisateur
 export async function createSession(userId: string) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     const session = await encrypt({ userId, expiresAt })
@@ -39,6 +42,7 @@ export async function createSession(userId: string) {
     })
 }
 
+// Fonction pour obtenir les données de session
 export async function getSession() {
     const cookieStore = await cookies();
     const session = cookieStore.get("session")?.value;
@@ -46,6 +50,7 @@ export async function getSession() {
     return await decrypt(session);
 }
 
+// Fonction pour mettre à jour la session
 export async function updateSession() {
     const session = (await cookies()).get('session')?.value
     const payload = await decrypt(session)
@@ -66,6 +71,7 @@ export async function updateSession() {
     })
 }
 
+// Fonction pour supprimer la session et déconnecter l'utilisateur
 export async function deleteSession() {
     const cookieStore = await cookies()
     cookieStore.delete('session')
