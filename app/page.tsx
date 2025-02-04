@@ -1,8 +1,10 @@
 import prisma from '@/lib/prisma'
 import SignupForm from '@/ui/signup-form';
+import { getSession } from '@/lib/session';
 
 export default async function Home() {
     const users = await prisma.user.findMany();
+    const session = await getSession();
     return (
         <div className="min-h-screen bg-gray-500 flex flex-col items-center justify-center -mt-16 text-black">
             <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
@@ -18,6 +20,7 @@ export default async function Home() {
             <div className='mt-8'>
                 <SignupForm />
             </div>
+            <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
     );
 }

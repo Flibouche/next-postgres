@@ -3,6 +3,8 @@
 import bcrypt from 'bcryptjs';
 import { SignupFormSchema, FormState } from '@/lib/definitions'
 import prisma from '@/lib/prisma'
+import { createSession, deleteSession } from '@/lib/session';
+import { redirect } from 'next/navigation';
 
 export async function signup(state: FormState, formData: FormData) {
     // Validate form fields
@@ -47,7 +49,14 @@ export async function signup(state: FormState, formData: FormData) {
         }
     }
 
-    return user;
+    console.log('User created:', user);
 
-    // Call the provider or db to create a user...
+    await createSession(user.id);
+
+    redirect('/posts');
+}
+
+export async function logout() {
+    deleteSession();
+    redirect('/');
 }
