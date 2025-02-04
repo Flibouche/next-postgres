@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
 import SignupForm from '@/ui/signup-form';
+import SignoutForm from '@/ui/signout-form';
 import { getSession } from '@/lib/session';
 
 export default async function Home() {
@@ -18,7 +19,12 @@ export default async function Home() {
                 ))}
             </ol>
             <div className='mt-8'>
-                <SignupForm />
+                {session ? (
+                    <SignoutForm />
+                ) :
+                    (
+                        <SignupForm />
+                    )}
             </div>
             <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
