@@ -1,5 +1,5 @@
 'use server'
-import { verifySession } from '@lib/dal'
+import { verifySession } from '@/lib/dal'
 
 export async function serverAction(formData: FormData) {
     const session = await verifySession()
