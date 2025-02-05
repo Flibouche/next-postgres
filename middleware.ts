@@ -23,13 +23,9 @@ export default async function middleware(req: NextRequest) {
     }
 
     // Redirection vers le dashboard si l'utilisateur est connecté
-    if (
-        isPublicRoute &&
-        session?.userId &&
-        !req.nextUrl.pathname.startsWith('/dashboard')
-    ) {
-        return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-    }
+    // if (isPublicRoute && session?.userId && !req.nextUrl.pathname.startsWith('/dashboard')) {
+    //     return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+    // }
 
     return NextResponse.next()
 }

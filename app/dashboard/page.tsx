@@ -1,7 +1,7 @@
 import SignoutForm from '@/ui/signout-form'
 import React from 'react'
 
-const Dashboard = () => {
+export default function Dashboard() {
     return (
         <div>
             <p>Dashboard</p>
@@ -9,5 +9,3 @@ const Dashboard = () => {
         </div>
     )
 }
-
-export default Dashboard
