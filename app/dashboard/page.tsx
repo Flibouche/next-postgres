@@ -1,18 +1,39 @@
 "use client";
 
-export default function Dashboard() {
-    // const { isAuth, user } = useAuth();
+import { useSession } from "next-auth/react"
+import { signOut } from "next-auth/react"
+import Image from "next/image"
+import Link from "next/link"
 
-    // if (!isAuth) {
-    //     return <p>Veuillez vous connecter.</p>;
-    // }
+export default function DashboardPage() {
+    const { data: session } = useSession();
 
-    // return (
-    //     <div>
-    //         <h1>Dashboard</h1>
-    //         <p>Bienvenue, {user?.name} !</p>
-    //         <p>Email: {user?.email}</p>
-    //         <p>Rôle: {user?.role}</p>
-    //     </div>
-    // );
+    return (
+        <>
+            {session?.user ? (
+                <>
+                    {session?.user?.image && (
+                        <Image
+                            src={session.user.image}
+                            alt="user avatar"
+                            width={32}
+                            height={32}
+                            className="rounded-full"
+                        />
+                    )}
+                    {session.user.name && (
+                        <span>{session.user.name}</span>
+                    )}
+                    <button onClick={() => signOut()}>
+                        Déconnexion
+                    </button>
+                </>
+            ) : (
+                <Link href="/login">
+                    <button>Connexion</button >
+                </Link >
+            )
+            }
+        </>
+    )
 }
