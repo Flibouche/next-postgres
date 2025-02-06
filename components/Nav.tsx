@@ -1,5 +1,7 @@
 "use client";
 
+import { signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 // Next
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,6 +23,7 @@ const links = [
 
 const Nav = () => {
     const pathname: string = usePathname();
+    const { data: session } = useSession();
 
     return (
         <nav className="flex items-center gap-8" aria-label='Desktop navigation'>
@@ -38,6 +41,30 @@ const Nav = () => {
                     </div>
                 </Link>
             ))}
+            {session?.user ? (
+                <>
+                    {session?.user?.image && (
+                        <Image
+                            src={session.user.image}
+                            alt="user avatar"
+                            width={32}
+                            height={32}
+                            className="rounded-full"
+                        />
+                    )}
+                    {session.user.name && (
+                        <span>{session.user.name}</span>
+                    )}
+                    <button onClick={() => signOut()}>
+                        Déconnexion
+                    </button>
+                </>
+            ) : (
+                <Link href="/login">
+                    <button>Connexion</button >
+                </Link >
+            )
+            }
         </nav >
     );
 };
