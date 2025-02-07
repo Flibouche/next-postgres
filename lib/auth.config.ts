@@ -4,6 +4,10 @@ import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import { signInSchema } from "./zod";
 import { getUser } from "./dal";
+import { hashPassword } from "./hash";
+import { compare } from "bcryptjs";
+
+import { getUsersByEmail } from "@/app/data/users";
 
 export default {
     providers: [
@@ -23,24 +27,51 @@ export default {
                 password: {},
             },
             authorize: async (credentials) => {
-                let user = null
 
-                const { email, password } = await signInSchema.parseAsync(credentials);
+                if (!credentials) return null;
 
-                // logic to salt and hash password
-                const pwHash = saltAndHashPassword(credentials.password)
+                try {
+                    const user = getUsersByEmail(credentials?.email);
 
-                // logic to verify if the user exists
-                user = await getUser(credentials.email, pwHash)
+                    if (user) {
+                        const isMatch = user?.password === credentials?.password;
 
-                if (!user) {
-                    // No user found, so this is their first attempt to login
-                    // Optionally, this is also the place you could do a user registration
-                    throw new Error("Invalid credentials.")
+                        if (isMatch) {
+                            return user;
+                        } else {
+                            throw new Error("Check your password !");
+                        }
+
+                    } else {
+                        throw new Error("User not found.");
+                    }
+
+                } catch (error) {
+                    throw new Error(error);
                 }
+                // let user = null
 
-                // return user object with their profile data
-                return user
+                // const { email, password } = await signInSchema.parseAsync(credentials);
+
+                // // logic to salt and hash password
+                // const hashedPassword = hashPassword(password)
+
+                // // logic to verify if the user exists
+                // user = await getUser(email)
+
+                // if (!user) {
+                //     // No user found, so this is their first attempt to login
+                //     // Optionally, this is also the place you could do a user registration
+                //     throw new Error("Invalid credentials.")
+                // }
+
+                // const isValidPassword = await compare(hashedPassword, user.password)
+                // if (!isValidPassword) {
+                //     throw new Error("Invalid credentials.")
+                // }
+
+                // // return user object with their profile data
+                // return user
             },
         }),
     ]
