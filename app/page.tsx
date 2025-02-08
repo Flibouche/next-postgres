@@ -1,17 +1,24 @@
 // import prisma from '@/lib/prisma'
 
+import LoginForm from "@/components/Login";
 import Logout from "@/components/Logout";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
     // const users = await prisma.user.findMany();
     const session = await auth();
     return (
         <div className="min-h-screen bg-gray-500 flex flex-col items-center justify-center -mt-16 text-black">
-            <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
-                Superblog
-            </h1>
+            <div className="flex flex-col justify-center items-center m-4">
+                <h1 className="text-3xl my-3">Hey, time to Sign In</h1>
+                <LoginForm />
+                <p className="my-3">
+                    Don't you have an account?
+                    <Link href="register" className="mx-2 underline">Register</Link>
+                </p>
+            </div>
             {session?.user?.name && session?.user?.image ? (
                 <>
                     <h1 className="text-3xl my-2">

@@ -1,64 +1,60 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import SocialLogins from "./SocialLogins";
 
 import { doCredentialLogin } from "@/app/actions/actions";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Login() {
 
-    const [error, setError] = useState("");
+const LoginForm = () => {
     const router = useRouter();
+    const [error, setError] = useState("");
 
-    async function handleFormSubmit(event) {
+    async function onSubmit(event) {
         event.preventDefault();
-
         try {
             const formData = new FormData(event.currentTarget);
 
             const response = await doCredentialLogin(formData);
 
             if (!!response.error) {
+                console.error(response.error);
                 setError(response.error.message);
             } else {
-                router.push('/');
+                router.push("/home");
             }
-
-        } catch (error) {
-            console.error(error);
-            setError("Check your credentials !");
+        } catch (e) {
+            console.error(e);
+            setError("Check your Credentials");
         }
     }
 
-    return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            {/* Social Login */}
-            <h2 className="font-bold">OAuth authentification</h2>
-            <div className="flex gap-5">
-                <button className="border p-2" onClick={() => signIn("github", { redirectTo: "/dashboard" })}>
-                    Sign in with GitHub
-                </button>
-                <button className="border p-2" onClick={() => signIn("google", { redirectTo: "/dashboard" })}>
-                    Sign in with Google
-                </button>
-            </div>
 
-            {/* Credentials Login */}
+    return (
+        <>
             <div className="text-xl text-red-500">{error}</div>
-            <form onSubmit={handleFormSubmit} className="flex flex-col gap-2 mt-5">
-                <h2>Credentials authentification</h2>
-                <label htmlFor="credentials-email">
-                    Email
-                    <input type="email" id="credentials-email" name="email" />
-                </label>
-                <label htmlFor="credentials-password">
-                    Password
-                    <input type="password" id="credentials-password" name="password" />
-                </label>
-                <input type="submit" value="Sign In" />
+            <form 
+                className="my-5 flex flex-col items-center border p-3 border-gray-200 rounded-md"
+                onSubmit={onSubmit}>
+                <div className="my-2">
+                    <label htmlFor="email">Email Address</label>
+                    <input className="border mx-2 border-gray-500 rounded" type="email" name="email" id="email" />
+                </div>
+
+                <div className="my-2">
+                    <label htmlFor="password">Password</label>
+                    <input className="border mx-2 border-gray-500 rounded" type="password" name="password" id="password" />
+                </div>
+
+                <button type="submit" className="bg-orange-300 mt-4 rounded flex justify-center items-center w-36">
+                    Ceredential Login
+                </button>
             </form>
-        </div>
-    )
-}
+            <SocialLogins />
+        </>
+    );
+};
+
+export default LoginForm;
