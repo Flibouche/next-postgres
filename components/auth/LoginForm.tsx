@@ -1,41 +1,44 @@
 "use client";
 
-import SocialLogins from "./SocialLogins";
-
 import { doCredentialLogin } from "@/app/actions/actions";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SocialLogins from "./SocialLogins";
 
 
 const LoginForm = () => {
     const router = useRouter();
     const [error, setError] = useState("");
 
-    async function onSubmit(event) {
+    async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
         try {
             const formData = new FormData(event.currentTarget);
 
             const response = await doCredentialLogin(formData);
 
-            if (!!response.error) {
+            if (response.error) {
                 console.error(response.error);
                 setError(response.error.message);
             } else {
                 router.push("/");
             }
-        } catch (e) {
-            console.error(e);
-            setError("Check your Credentials");
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(error.message);
+                setError("Check your Credentials");
+            } else {
+                console.error(error);
+            }
         }
     }
-
 
     return (
         <>
             <div className="text-xl text-red-500">{error}</div>
-            <form 
+            <form
                 className="my-5 flex flex-col items-center border p-3 border-gray-200 rounded-md"
                 onSubmit={onSubmit}>
                 <div className="my-2">
