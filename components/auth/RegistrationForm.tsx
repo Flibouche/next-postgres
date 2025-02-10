@@ -7,7 +7,7 @@ const RegistrationForm = () => {
 
     const router = useRouter();
 
-    async function handleSubmit(event) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         try {
@@ -29,11 +29,16 @@ const RegistrationForm = () => {
                 })
             });
 
-            response.status === 201 && router.push('/');
+            if (response.status === 201) {
+                router.push('/');
+            }
 
-
-        } catch (e) {
-            console.error(e.message)
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(error.message);
+            } else {
+                console.error(error);
+            }
         }
     }
 
