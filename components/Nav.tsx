@@ -12,6 +12,9 @@ export default async function Nav() {
                 <Link href='/'>
                     Home
                 </Link>
+                <Link href='/user'>
+                    List of users
+                </Link>
 
                 {/* Session */}
                 {session ? (
