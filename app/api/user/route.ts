@@ -1,12 +1,16 @@
 import { prisma } from "@/lib/prisma";
+import { User } from "@/lib/types/types";
 import { NextResponse } from "next/server";
+
+type PartialUser = Pick<User, "id" | "email" | "name">;
 
 export async function GET() {
     try {
-        const users = await prisma.user.findMany({
+        const users: PartialUser[] = await prisma.user.findMany({
             select: {
                 id: true,
                 name: true,
+                email: true,
             },
             orderBy: {
                 name: 'asc'

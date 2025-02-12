@@ -21,7 +21,10 @@ const UsersPage = () => {
             <h1 className='font-bold'>Users :</h1>
             <ul>
                 {users?.map((user) => (
-                    <li key={user.id}>{user.name}</li>
+                    <div key={user.id} className='flex gap-5'>
+                        <span>{user.name}</span>
+                        <span>{user.email}</span>
+                    </div>
                 ))}
             </ul>
         </div>
