@@ -72,6 +72,7 @@ export default {
             return session;
         },
         
+        // Redirection après connexion
         async redirect() {
             return "/dashboard";
         }
