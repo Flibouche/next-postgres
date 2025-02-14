@@ -5,6 +5,7 @@ export interface User {
     emailVerified?: Date;
     password?: string;
     image?: string;
+    role: string;
     accounts: Account[];
     sessions: Session[];
     authenticators?: Authenticator[];

@@ -19,6 +19,13 @@ export async function doCredentialLogin(formData) {
             redirect: false,
         });
 
+        console.log(response);
+
+        if (response.error) {
+            console.log("Test");
+            throw new Error(response.error);
+        }
+
         return response;
     } catch (error) {
         throw new Error(error);
