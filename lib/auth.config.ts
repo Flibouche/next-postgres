@@ -1,25 +1,36 @@
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, User } from "next-auth";
 import { isPasswordValid } from "./hash";
 import { prisma } from "./prisma";
 
+declare module "next-auth" {
+    interface User {
+        role: string;
+    }
+}
+
 export default {
     providers: [
+        // Authentification par GitHub
         GitHub({
             clientId: process.env.AUTH_GITHUB_ID,
             clientSecret: process.env.AUTH_GITHUB_SECRET,
         }),
+        // Authentification par Google
         Google({
             clientId: process.env.AUTH_GOOGLE_ID,
             clientSecret: process.env.AUTH_GOOGLE_SECRET,
         }),
+        // Authentification par identifiants
         Credentials({
+            name: "Credentials",
             credentials: {
-                email: {},
-                password: {},
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" },
             },
+            // Fonction pour vérifier les identifiants
             authorize: async (credentials) => {
 
                 if (!credentials) return null;
@@ -55,26 +66,29 @@ export default {
     ],
     callbacks: {
         // Ajout du rôle utilisateur au token JWT
-        async jwt({token, user}) {
+        async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
-                // token.role = user.role;
+                token.role = user.role;
             }
             return token;
         },
 
         // Ajout du rôle utilisateur à la session
-        async session({session, token}) {
+        async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
-                // session.user.role = token.role as string;
+                session.user.role = token.role as string;
             }
             return session;
         },
-        
+
         // Redirection après connexion
-        async redirect() {
-            return "/dashboard";
+        async redirect({ url, baseUrl }) {
+            // Vérification si un callback est présent dans l'URL pour rediriger l'utilisateur sur la page souhaitée
+            const callbackUrl = new URL(url, baseUrl).searchParams.get("callbackUrl");
+            // Redirige vers la page d'accueil si il n'y a pas de callback
+            return callbackUrl ? decodeURIComponent(callbackUrl) : "/";
         }
     }
 } satisfies NextAuthConfig

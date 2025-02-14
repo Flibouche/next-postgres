@@ -21,14 +21,15 @@ const LoginForm = () => {
 
             if (response.error) {
                 console.error(response.error);
-                setError(response.error.message);
+                setError("Check your credentials");
             } else {
                 router.push("/");
             }
+
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error.message);
-                setError("Check your Credentials");
+                setError(error.message);
             } else {
                 console.error(error);
             }
