@@ -1,15 +1,19 @@
 import { getAccessToken } from "./authTwitch";
 
-/**
- * Fetches a list of games from the IGDB API based on the provided name.
- *
- * @param name - The name of the game to search for. If not provided, all games will be fetched.
- * @returns A promise that resolves to the list of games matching the search criteria.
- * @throws {@link Error} Throws an error if the API request fails or if there is an issue fetching the access token.
- */
+const endpoint = "https://api.igdb.com/v4/games";
+
 export async function getGames(name: string) {
     try {
         const accessToken = await getAccessToken();
+        const twitchClientId = process.env.TWITCH_CLIENT_ID ?? "";
+
+        if (!twitchClientId) {
+            throw new Error("Twitch client ID is missing");
+        }
+
+        if (!accessToken) {
+            throw new Error("Access token is missing");
+        }
 
         const queryString = `
         fields id, name, first_release_date, cover.image_id;
@@ -18,10 +22,10 @@ export async function getGames(name: string) {
         limit 5;
         `;
 
-        const response = await fetch("https://api.igdb.com/v4/games", {
+        const response = await fetch(endpoint, {
             method: "POST",
             headers: {
-                "Client-ID": process.env.TWITCH_CLIENT_ID ?? '',
+                "Client-ID": twitchClientId,
                 "Authorization": `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
             },
@@ -32,7 +36,9 @@ export async function getGames(name: string) {
             throw new Error(`API request failed with status: ${response.status}`);
         }
 
-        return await response.json();
+        const data = await response.json();
+
+        return data;
     } catch (error) {
         throw new Error(`Error fetching games: ${error instanceof Error ? error.message : error}`);
     }

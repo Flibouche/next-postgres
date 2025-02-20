@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 const protectedRoutes = ["/dashboard"];
 
 // Routes publiques
-const publicRoutes = ["/login", "/register", "/"];
+const publicRoutes = ["/login", "/register", "/", "game"];
 
 export default auth((req) => {
     const { nextUrl } = req;

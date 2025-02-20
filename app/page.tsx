@@ -1,10 +1,7 @@
 import { auth } from "@/lib/auth";
-import { getGames } from "@/lib/igdbApi";
 
 export default async function Home() {
     const session = await auth();
-    const games = await getGames("zelda");
-    console.log(games);
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center -mt-16 text-white">
