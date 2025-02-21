@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/lib/auth";
+// import nodemailer from "nodemailer";
 
 export async function doSocialLogin(formData) {
     const action = formData.get('action');
@@ -12,6 +13,23 @@ export async function doLogout() {
 }
 
 export async function doCredentialLogin(formData) {
+    // const transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     port: 587,
+    //     secure: false,
+    //     auth: {
+    //         user: process.env.EMAIL_USER,
+    //         pass: process.env.EMAIL_PASSWORD,
+    //     },
+    // });
+
+    // const mailOptions = {
+    //     from: process.env.EMAIL_USER,
+    //     to: "kevin.pfiffer2@gmail.com",
+    //     subject: "Test",
+    //     text: "Hello ceci est un test",
+    // };
+
     try {
         const response = await signIn("credentials", {
             email: formData.get("email"),
@@ -19,7 +37,7 @@ export async function doCredentialLogin(formData) {
             redirect: false,
         });
 
-        console.log(response);
+        // await transporter.sendMail(mailOptions);
 
         if (response.error) {
             console.log("Test");

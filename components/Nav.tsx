@@ -15,6 +15,9 @@ export default async function Nav() {
                 <Link href='/user'>
                     List of users
                 </Link>
+                <Link href='/game'>
+                    Games
+                </Link>
 
                 {/* Session */}
                 {session ? (
