@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 const UsersPage = () => {
 
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<{ id: string; email: string; name?: string }[]>([]);
     useEffect(() => {
         const fetchUsers = async () => {
             const response = await fetch('/api/user');
