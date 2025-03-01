@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { User } from "@/lib/types/types";
-import { NextResponse } from "next/server";
+import { User as UserOOP } from "@/models/User";
+import { NextRequest, NextResponse } from "next/server";
 
 type PartialUser = Pick<User, "id" | "email" | "name">;
 
@@ -29,3 +30,16 @@ export async function GET() {
         return NextResponse.json({ data: null, message: `Internal Error: ${(error as Error).message}`, success: false }, { status: 500 });
     }
 }
+
+// export async function GET(req: NextRequest) {
+//     const { searchParams } = new URL(req.url);
+//     const userId = searchParams.get("id");
+
+//     if (!userId) return NextResponse.json({ error: "ID requis" }, { status: 400 });
+
+//     const user = await UserOOP.findById(userId);
+
+//     if (!user) return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
+
+//     return NextResponse.json({ user: user.getInfo() }, { status: 200 });
+// }
