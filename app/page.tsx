@@ -1,3 +1,4 @@
+import IsUser from "@/components/isUser";
 import { auth } from "@/lib/auth";
 
 export default async function Home() {
@@ -22,6 +23,9 @@ export default async function Home() {
                     </h2>
                 </div>
             )}
+            <IsUser user={session?.user}>
+                <p>Hello my beautiful user, this is the IsUser component !</p>
+            </IsUser>
         </div>
     );
 }

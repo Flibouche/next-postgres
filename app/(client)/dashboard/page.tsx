@@ -1,6 +1,6 @@
+import IsUser from "@/components/isUser";
 import { auth } from "@/lib/auth";
 import Image from "next/image"
-import Link from "next/link"
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
@@ -26,12 +26,15 @@ export default async function DashboardPage() {
                         />
                     )}
                     <div>
-                        {session?.user?.role === "ADMIN" && (
+                        {/* {session?.user?.role === "ADMIN" && (
                             <p>Hello my beautiful admin !</p>
                         )}
                         {session?.user?.role === "USER" && (
                             <p>Hello my beautiful user !</p>
-                        )}
+                        )} */}
+                        <IsUser user={session?.user}>
+                            <p>Hello my beautiful user !</p>
+                        </IsUser>
                     </div>
                 </>
             ) : (
@@ -39,9 +42,6 @@ export default async function DashboardPage() {
                     Welcome, {session?.user?.email}
                 </h1>
             )}
-            <Link href="/login">
-                <button>Connexion</button >
-            </Link >
         </div>
     );
 };
